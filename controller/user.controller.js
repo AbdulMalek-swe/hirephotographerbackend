@@ -1,7 +1,11 @@
 const User = require("../model/user.model");
-const { postSignInService, findUserByEmail } = require("../services/user.service");
+const { postSignInService, findUserByEmail, userImageUploadService } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
-
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const { sendMailWithGmail } = require("../utils/email");
+const path = require("path");
+const Photographer = require("../model/photographer.model");
 module.exports.postSignUp = async (req, res) => {
   try {
     console.log(req.body);
@@ -89,3 +93,81 @@ module.exports.getUser = async(req,res,next)=>{
     })
   }
 }
+module.exports.userSendMessage=async(req,res)=>{
+  try {
+    const mailData = {
+      to:['abdulmalek.swe.585@gmail.com'],
+      subject:"veryfy your token",
+      text:` ${req.body.message} : ${
+        req.protocol
+      }`
+    }
+  const result =  await sendMailWithGmail(mailData)
+     console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+}
+module.exports.uploadPhoto=async(req,res)=>{
+  try {
+   
+    const file = req.file;
+   
+   console.log(path);
+    const result = await userImageUploadService(req?.body?.email,file)
+    res.status(200).json({
+      result:"got success",
+      result:result
+   })
+  } catch (error) {
+    console.log(error.message); 
+  } 
+}
+
+const stripe = require('stripe')('sk_test_51MvGRULyPagBwcPn1TU5Lz4zs5gtiPXOI0mu4fTuB0bCw2nVQaEx6kMhwLDTBYrtM4egGrYPDequW4jT9nxaP0LS00n9kJftIq');
+ module.exports.payment = async(req,res)=>{
+// StripePaymentView
+  try {
+    const {id} = req.body;
+       const result =await Photographer.findById(id);
+       console.log(result);
+      const c_amount = result?.amount;
+      const intent = await stripe.paymentIntents.create({
+        amount: 100 * c_amount,
+        currency: 'usd',
+        payment_method_types: ['card'],
+      });
+      // await Charge.create({
+      //   // user: req.user,
+      //   amount: c_amount,
+      //   client_secret: intent.client_secret,
+      //   payment_id: intent.id,
+      // });
+      console.log(" is back");
+      res.status(200).json({
+        message: 'Payment intent created successfully',
+        amount: c_amount,
+        payment_id: intent.id,
+        client_secret: intent.client_secret,
+        publish_key: 'pk_test_51MvGRULyPagBwcPn8cfry3uU9i9gGASSwjiGcTz10T4zUROjvtfdtuyx4NGQYwWX8gRqbAjFV3E9rW4B44WsP161006YllnuPM',
+      });
+  } catch (error) {
+  res.status(400).json({
+      error: error.toString(),
+    });
+  }
+ }
+ module.exports.paymentConfirm =async(req,res)=>{
+try {
+      const { payment_id } = req.body;
+        res.status(201).json({
+          message: 'You successfully subscribed',
+          data: {
+             id:"this is back id"
+          },
+        });
+      }  
+  catch (error) {
+   
+}
+ }

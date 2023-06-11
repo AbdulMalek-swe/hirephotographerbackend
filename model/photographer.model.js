@@ -22,9 +22,9 @@ const photographerSchema = mongoose.Schema(
       type: String,
       validate: [validator.isMobilePhone, "Please provide a valid contact number"],
     },
-    imageURL: {
+    pdfLink: {
       type: String,
-      validate: [validator.isURL, "Please provide a valid url"],
+      // validate: [validator.isURL, "Please provide a valid url"],
     },
     rating:{
         type:Number,
@@ -37,17 +37,14 @@ const photographerSchema = mongoose.Schema(
     },
     amount:{
         type:Number,
-        required: [true, "amount address is required"]
+        
     },
     activeStatus:{
         type:String,
         value:[true,false],
         default:false
     },
-    types:{
-      type: String,
-      required:true
-    },
+    
     
   },
   {

@@ -20,3 +20,10 @@ module.exports.userMakeAdminService = async(email)=>{
     const admin = await User.updateOne({_id:result._id},{$set:{status:'admin'}},{ruvalidators:true});
     return admin; 
 }
+module.exports.userImageUploadService = async(email,picName)=>{
+    console.log(email);
+    const result = await User.findOne({email:email});
+    console.log(result);
+    const updateResult = await User.updateOne({_id:result._id},{$set:{imageUrl:'http://localhost:5000/'+picName?.path}},{ruvalidators:true});
+    return updateResult;    
+}

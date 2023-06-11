@@ -59,12 +59,11 @@ const userSchema = mongoose.Schema(
       maxLength: [100, "Name is too large"],
     },
     
-
     // shippingAddress: String,
 
     imageURL: {
       type: String,
-      validate: [validator.isURL, "Please provide a valid url"],
+      // validate: [validator.isURL, "Please provide a valid url"],
     },
     hiredPhotographer:[ {
       type: mongoose.Schema.Types.ObjectId,
