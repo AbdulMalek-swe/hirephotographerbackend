@@ -93,26 +93,27 @@ module.exports.getUser = async(req,res,next)=>{
     })
   }
 }
+
+
 module.exports.userSendMessage=async(req,res)=>{
   try {
-    const mailData = {
+    console.log("come to ovijog",req.body);
+    const mailData = { 
       to:['abdulmalek.swe.585@gmail.com'],
       subject:"veryfy your token",
-      text:` ${req.body.message} : ${
-        req.protocol
-      }`
+      text:req.body.message,
     }
+    await sendMailWithGmail(mailData)
   const result =  await sendMailWithGmail(mailData)
      console.log(result);
   } catch (error) {
     console.log(error);
   }
 }
+
 module.exports.uploadPhoto=async(req,res)=>{
   try {
-   
     const file = req.file;
-   
    console.log(path);
     const result = await userImageUploadService(req?.body?.email,file)
     res.status(200).json({

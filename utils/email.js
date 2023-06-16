@@ -29,8 +29,10 @@ module.exports.sendMailWithGmail = async (data) => {
       to: data.to, // list of receivers
       subject: data.subject,
       text: data.text,
-      html: ` ${data.text} 
-          `,
+      html:data.html
+      // html:  `<b>Hey there! </b><h1 style="color:"red">this is good practice ${data.text}</h1><button>confirm mail</button>
+      //    <br> This is our first message sent with Nodemailer<br/> 
+      //    `,
     };
     // console.log(mailData);
     let info = await transporter.sendMail(mailData);
