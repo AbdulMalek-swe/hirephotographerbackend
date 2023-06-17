@@ -1,5 +1,5 @@
 const User = require("../model/user.model");
-const { postSignInService, findUserByEmail, userImageUploadService } = require("../services/user.service");
+const { postSignInService, findUserByEmail, userImageUploadService, contactService, contactServiceGet } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
@@ -93,19 +93,31 @@ module.exports.getUser = async(req,res,next)=>{
     })
   }
 }
-
-
+  // user contact code here 
 module.exports.userSendMessage=async(req,res)=>{
   try {
-    console.log("come to ovijog",req.body);
-    const mailData = { 
-      to:['abdulmalek.swe.585@gmail.com'],
-      subject:"veryfy your token",
-      text:req.body.message,
-    }
-    await sendMailWithGmail(mailData)
-  const result =  await sendMailWithGmail(mailData)
-     console.log(result);
+    const contact = await contactService('abdulmalek.swe.585@gmail.com',req.body.message)
+    console.log(contact);
+    // const mailData = { 
+    //   to:['abdulmalek.swe.585@gmail.com'],
+    //   subject:"veryfy your token",
+    //   text:req.body.message,
+    // }
+    // await sendMailWithGmail(mailData)
+  // const result =  await sendMailWithGmail(mailData)
+      res.status(200).json({
+        contact
+      })
+  } catch (error) {
+    console.log(error);
+  }
+}
+module.exports.userGetMessage=async(req,res)=>{
+  try {
+    const contact = await contactServiceGet('abdulmalek.swe.585@gmail.com',req.body.message)
+      res.status(200).json({
+        contact
+      })
   } catch (error) {
     console.log(error);
   }

@@ -1,3 +1,4 @@
+const Contact = require("../model/contact.model");
 const User = require("../model/user.model");
 module.exports.postSignUpService =async(data)=>{
     const result = await User.create(data);
@@ -26,4 +27,10 @@ module.exports.userImageUploadService = async(email,picName)=>{
     console.log(result);
     const updateResult = await User.updateOne({_id:result._id},{$set:{imageUrl:'http://localhost:5000/'+picName?.path}},{ruvalidators:true});
     return updateResult;     
+}
+module.exports.contactService=async(email,message)=>{
+    return   await Contact.create({email,message});
+}
+module.exports.contactServiceGet=async(email)=>{
+    return   await Contact.find({}); 
 }
