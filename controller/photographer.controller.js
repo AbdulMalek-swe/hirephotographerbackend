@@ -3,7 +3,9 @@ const Photographer = require("../model/photographer.model");
 const User = require("../model/user.model");
 const { postPhotographerService,
   getPhotographerService, 
-  postUserOrderService } = require("../services/photographer.service");
+  postUserOrderService,
+deletePhotographerService ,
+statusPhotographerService} = require("../services/photographer.service");
  
  
 module.exports.postPhotographer = async (req, res) => {
@@ -79,6 +81,46 @@ module.exports.updateUserOrderPhotographer = async (req, res, next) => {
     res.status(500).json({ message: 'Server Error',error:err.message });
   }
 }
+
+module.exports.deletePhotographer =async(req,res)=>{
+  try {
+    const {id} = req.params;
+    console.log(id);
+    const result = await  deletePhotographerService(id)
+    console.log(result);
+    res.status(200).json({
+      result
+    })
+  } catch (error) {
+    res.status(200).json({
+     error:error.message
+    })
+  }
+}
+module.exports.statusPhotographer =async(req,res)=>{
+  try {
+    const {id} = req.params;
+    
+    const result = await  statusPhotographerService(id,req.body.value)
+    console.log(result);
+    res.status(200).json({
+      result
+    })
+  } catch (error) {
+    res.status(200).json({
+     error:error.message
+    })
+  }
+}
+
+
+
+
+
+
+
+
+
 
 // module.exports.getPhotographer = async(req,res,next)=>{
 //   try{

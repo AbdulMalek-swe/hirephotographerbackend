@@ -10,5 +10,9 @@ router
 router
 .route("/photographer/:id")
 .post(verifyToken, photographer.updateUserOrderPhotographer)
+router
+.route("/photographer/:id")
+.delete(photographer.deletePhotographer)
+.patch(photographer.statusPhotographer)
  
 module.exports = router

@@ -12,6 +12,15 @@ module.exports.postUserOrder =async(data)=>{
     const result = await Photographer.create(data);
     return result;
 } 
+ 
+module.exports.deletePhotographerService =async(id)=>{
+    const result = await Photographer.deleteOne({_id:id});
+    return result;
+} 
+module.exports.statusPhotographerService = async(id,value)=>{
+    const result = await Photographer.updateOne({_id:id},{$set:{activeStatus:value}},{ruvalidators:true})
+    return result;
+}
 
 
 // module.exports.postSignInService = async(email)=>{
