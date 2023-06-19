@@ -157,11 +157,11 @@ module.exports.userGetMessage=async(req,res)=>{
 
 module.exports.uploadPhoto=async(req,res)=>{
   try {
-    const file = req.file;
-   console.log(path);
-    const result = await userImageUploadService(req?.body?.email,file)
+    const files = req.file;
+   console.log(files);
+    const result = await userImageUploadService(req?.user?.email,files)
     res.status(200).json({
-      result:"got success",
+       
       result:result
    })
   } catch (error) {

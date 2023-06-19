@@ -25,7 +25,7 @@ module.exports.userImageUploadService = async(email,picName)=>{
     console.log(email);
     const result = await User.findOne({email:email});
     console.log(result);
-    const updateResult = await User.updateOne({_id:result._id},{$set:{imageUrl:'http://localhost:5000/'+picName?.path}},{ruvalidators:true});
+    const updateResult = await User.updateOne({_id:result._id},{$set:{imageURL:'http://localhost:5000/'+picName?.path}},{ruvalidators:true});
     return updateResult;     
 }
 module.exports.contactService=async(email,message)=>{
@@ -37,4 +37,4 @@ module.exports.contactServiceGet=async(email)=>{
 module.exports.getUserAllService = async(id)=>{
     const result = await User.findOne({ _id: id }).populate({ path: "hiredPhotographer", model: "Photographer" }).exec()
     return result;
-}
+} 
