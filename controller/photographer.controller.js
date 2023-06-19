@@ -101,7 +101,7 @@ module.exports.statusPhotographer =async(req,res)=>{
   try {
     const {id} = req.params;
     
-    const result = await  statusPhotographerService(id,req.body.value)
+    const result = await  statusPhotographerService(id,req.body)
     console.log(result);
     res.status(200).json({
       result

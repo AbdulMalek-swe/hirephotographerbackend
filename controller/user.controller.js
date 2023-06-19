@@ -6,6 +6,7 @@ const { google } = require("googleapis");
 const { sendMailWithGmail } = require("../utils/email");
 const path = require("path");
 const Photographer = require("../model/photographer.model");
+const { statusPhotographerService } = require("../services/photographer.service");
 module.exports.postSignUp = async (req, res) => {
   try {
     console.log(req.body);
@@ -143,7 +144,7 @@ const stripe = require('stripe')('sk_test_51MvGRULyPagBwcPn1TU5Lz4zs5gtiPXOI0mu4
   try {
     const {id} = req.body;
        const result =await Photographer.findById(id);
-       console.log(result);
+      //  await  statusPhotographerService(id,{activeStatus:'false'})
       const c_amount = result?.amount;
       const intent = await stripe.paymentIntents.create({
         amount: 100 * c_amount,
@@ -173,6 +174,8 @@ const stripe = require('stripe')('sk_test_51MvGRULyPagBwcPn1TU5Lz4zs5gtiPXOI0mu4
  module.exports.paymentConfirm =async(req,res)=>{
 try {
       const { payment_id } = req.body;
+      console.log(req.body);
+      await  statusPhotographerService(req.body.id,{activeStatus:'false'})
         res.status(201).json({
           message: 'You successfully subscribed',
           data: {

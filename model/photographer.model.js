@@ -44,8 +44,7 @@ const photographerSchema = mongoose.Schema(
         value:[true,false],
         default:false
     },
-    
-    
+
   },
   {
     timestamps: true,

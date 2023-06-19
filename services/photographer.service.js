@@ -18,7 +18,8 @@ module.exports.deletePhotographerService =async(id)=>{
     return result;
 } 
 module.exports.statusPhotographerService = async(id,value)=>{
-    const result = await Photographer.updateOne({_id:id},{$set:{activeStatus:value}},{ruvalidators:true})
+    console.log(value);
+    const result = await Photographer.updateOne({_id:id},{$set:value},{ruvalidators:true})
     return result;
 }
 
