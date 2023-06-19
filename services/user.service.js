@@ -34,3 +34,7 @@ module.exports.contactService=async(email,message)=>{
 module.exports.contactServiceGet=async(email)=>{
     return   await Contact.find({}); 
 }
+module.exports.getUserAllService = async(id)=>{
+    const result = await User.findOne({ _id: id }).populate({ path: "hiredPhotographer", model: "Photographer" }).exec()
+    return result;
+}

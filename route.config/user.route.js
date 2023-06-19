@@ -11,5 +11,6 @@ router.post("/contact", user.userSendMessage)
 router.get("/contact", user.userGetMessage)
 router.post("/upload-user", upload.single("file"),  user.uploadPhoto)
 router.post("/payment",    user.payment)
-router.post("/payment/confirm",    user.paymentConfirm)
+router.post("/payment/confirm",verifyToken, user.paymentConfirm)
+router.get("/user/detail/:id", user.getUserAll)
 module.exports = router

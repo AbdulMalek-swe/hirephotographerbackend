@@ -63,10 +63,10 @@ module.exports.updateUserOrderPhotographer = async (req, res, next) => {
     if (!photographer) {
       return res.status(404).json({ message: 'Photographer not found' });
     }
-  const result = await User.findOne({email:{$in:req.user.email}})
-  if (!result || result.length === 0) {
-    return res.status(404).json({ message: 'Photographers not found' });
-  }
+  // const result = await User.findOne({email:{$in:req.user.email}})
+  // if (!result || result.length === 0) {
+  //   return res.status(404).json({ message: 'Photographers not found' });
+  // }
 
     // Update the hiredPhotographer field of the user
     const user = await User.findByIdAndUpdate(

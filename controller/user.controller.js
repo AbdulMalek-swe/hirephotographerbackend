@@ -1,5 +1,12 @@
 const User = require("../model/user.model");
-const { postSignInService, findUserByEmail, userImageUploadService, contactService, contactServiceGet } = require("../services/user.service");
+const {
+   postSignInService,
+   findUserByEmail, 
+   userImageUploadService, 
+   contactService, 
+   contactServiceGet,
+   getUserAllService 
+  } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
@@ -94,6 +101,29 @@ module.exports.getUser = async(req,res,next)=>{
     })
   }
 }
+
+module.exports.getUserAll = async(req,res)=>{
+  try {
+    const {id} = req.params;
+      const result = await getUserAllService(id);
+      const {password, ...users}= result.toObject()
+      
+      if(!result){
+       return res.status(501).json({
+        error: "not find user",
+       })
+      }
+     res.status(200).json({
+       message:"user find successfully",
+         user:users,
+      })
+  } catch (error) {
+    console.log(error.message);
+    res.status(200).json({
+      err: error.message
+    })
+  }
+}
   // user contact code here 
 module.exports.userSendMessage=async(req,res)=>{
   try {
@@ -174,8 +204,29 @@ const stripe = require('stripe')('sk_test_51MvGRULyPagBwcPn1TU5Lz4zs5gtiPXOI0mu4
  module.exports.paymentConfirm =async(req,res)=>{
 try {
       const { payment_id } = req.body;
-      console.log(req.body);
-      await  statusPhotographerService(req.body.id,{activeStatus:'false'})
+      
+        const { id } = req.body
+
+        // Find the specified photographer by their ID
+        const photographer = await Photographer.findById(id);
+        console.log(photographer);
+        // if (!photographer) {
+        //   return res.status(404).json({ message: 'Photographer not found' });
+        // }
+      const result = await User.findOne({email:{$in:req.user.email}})
+      console.log(result);
+      // if (!result || result.length === 0) {
+      //   return res.status(404).json({ message: 'Photographers not found' });
+      // }
+    
+        // Update the hiredPhotographer field of the user
+        const user = await User.findByIdAndUpdate(
+          result._id, // assuming you have implemented authentication middleware
+          { $push:{hiredPhotographer:id }},
+          { new: true }
+        );
+       await statusPhotographerService(req.body.id,{activeStatus:'false'})
+
         res.status(201).json({
           message: 'You successfully subscribed',
           data: {
@@ -184,6 +235,11 @@ try {
         });
       }  
   catch (error) {
-   
+    res.status(401).json({
+          message: 'You successfully subscribed',
+          data: {
+             id:"this is back id"
+          },
+        });
 }
  }
