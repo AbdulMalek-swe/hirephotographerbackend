@@ -14,6 +14,7 @@ const { sendMailWithGmail } = require("../utils/email");
 const path = require("path");
 const Photographer = require("../model/photographer.model");
 const { statusPhotographerService } = require("../services/photographer.service");
+const Payment = require("../model/Pay");
 module.exports.postSignUp = async (req, res) => {
   try {
     console.log(req.body);
@@ -206,15 +207,20 @@ try {
       const { payment_id } = req.body;
       
         const { id } = req.body
-
+       
         // Find the specified photographer by their ID
         const photographer = await Photographer.findById(id);
-        console.log(photographer);
+        
+         
+
         // if (!photographer) {
         //   return res.status(404).json({ message: 'Photographer not found' });
         // }
       const result = await User.findOne({email:{$in:req.user.email}})
-      console.log(result);
+       console.log(result.hiredPhotographer.includes(id));
+       if(result.hiredPhotographer.includes(id)){
+        return res.status(404).json({ message: 'Photographers not found' });
+       }
       // if (!result || result.length === 0) {
       //   return res.status(404).json({ message: 'Photographers not found' });
       // }
@@ -222,19 +228,22 @@ try {
         // Update the hiredPhotographer field of the user
         const user = await User.findByIdAndUpdate(
           result._id, // assuming you have implemented authentication middleware
-          { $push:{hiredPhotographer:id }},
+          { $addToSet: { hiredPhotographer: { $each: [id] } } },
           { new: true }
         );
+        // console.log(user);
        await statusPhotographerService(req.body.id,{activeStatus:'false'})
-
+        
+        await  Payment.create({email:result?.email,payId:payment_id,firstName:result?.firstName})
         res.status(201).json({
           message: 'You successfully subscribed',
           data: {
-             id:"this is back id"
+             id:"t  id"
           },
         });
       }  
   catch (error) {
+    console.log(error.message);
     res.status(401).json({
           message: 'You successfully subscribed',
           data: {
