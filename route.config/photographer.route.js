@@ -14,5 +14,8 @@ router
 .route("/photographer/:id")
 .delete(photographer.deletePhotographer)
 .patch(photographer.statusPhotographer)
+router
+.route("/photographer/rating/:id")
+.patch(photographer.ratingPhotographer)
  
 module.exports = router

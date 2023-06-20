@@ -29,7 +29,7 @@ module.exports.userImageUploadService = async (email, picName) => {
 module.exports.contactService = async (email, message) => {
     return await Contact.create({ email, message });
 }
-module.exports.contactServiceGet = async (email) => {
+module.exports.contactServiceGet = async () => {
     return await Contact.find({});
 }
 module.exports.getUserAllService = async (id) => {

@@ -37,12 +37,15 @@ const photographerSchema = mongoose.Schema(
     },
     amount:{
         type:Number,
-        
+        default:22
     },
     activeStatus:{
         type:String,
         value:[true,false],
         default:false
+    },
+    img:{
+      type:String
     },
     hireCount:{
       type: Number,

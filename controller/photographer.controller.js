@@ -5,7 +5,8 @@ const { postPhotographerService,
   getPhotographerService, 
   postUserOrderService,
 deletePhotographerService ,
-statusPhotographerService} = require("../services/photographer.service");
+statusPhotographerService,
+ratingPhotographerService} = require("../services/photographer.service");
  
  
 module.exports.postPhotographer = async (req, res) => {
@@ -102,6 +103,21 @@ module.exports.statusPhotographer =async(req,res)=>{
     const {id} = req.params;
     
     const result = await  statusPhotographerService(id,req.body)
+    console.log(result);
+    res.status(200).json({
+      result
+    })
+  } catch (error) {
+    res.status(200).json({
+     error:error.message
+    })
+  }
+}
+module.exports.ratingPhotographer =async(req,res)=>{
+  try {
+    const {id} = req.params;
+    
+    const result = await  ratingPhotographerService(id,req.body)
     console.log(result);
     res.status(200).json({
       result

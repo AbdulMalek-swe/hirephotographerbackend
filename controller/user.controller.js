@@ -128,7 +128,7 @@ module.exports.getUserAll = async(req,res)=>{
   // user contact code here 
 module.exports.userSendMessage=async(req,res)=>{
   try {
-    const contact = await contactService('abdulmalek.swe.585@gmail.com',req.body.message)
+    const contact = await contactService(req.body.email,req.body.message)
     console.log(contact);
     // const mailData = { 
     //   to:['abdulmalek.swe.585@gmail.com'],
@@ -146,9 +146,28 @@ module.exports.userSendMessage=async(req,res)=>{
 }
 module.exports.userGetMessage=async(req,res)=>{
   try {
-    const contact = await contactServiceGet('abdulmalek.swe.585@gmail.com',req.body.message)
+    console.log(req.body,'ok');
+    const contact = await contactServiceGet()
       res.status(200).json({
         contact
+      })
+  } catch (error) {
+    console.log(error);
+  }
+} 
+module.exports.userPostMessage=async(req,res)=>{
+  try {
+    console.log(req.body,'ok');
+    const contact = await contactServiceGet(req.body.email,req.body.message)
+    const mailData = { 
+      to:[req.body.email],
+      subject:"veryfy your token",
+      text:req.body.message,
+    }
+    await sendMailWithGmail(mailData)
+  const result =  await sendMailWithGmail(mailData)
+      res.status(200).json({
+        message:"success" 
       })
   } catch (error) {
     console.log(error);

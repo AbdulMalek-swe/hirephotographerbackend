@@ -22,6 +22,14 @@ module.exports.statusPhotographerService = async(id,value)=>{
     const result = await Photographer.updateOne({_id:id},{$set:value},{ruvalidators:true})
     return result;
 }
+module.exports.ratingPhotographerService = async(id,value)=>{
+     const rp = await Photographer.findById(id)
+     console.log(rp,"this");
+     rp.rating
+    // const result = await Photographer.updateOne({_id:id},{$set:value},{ruvalidators:true})
+    // return result;
+}
+ 
 
 
 // module.exports.postSignInService = async(email)=>{
