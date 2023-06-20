@@ -44,6 +44,10 @@ const photographerSchema = mongoose.Schema(
         value:[true,false],
         default:false
     },
+    hireCount:{
+      type: Number,
+      default: 0
+    }
 
   },
   {

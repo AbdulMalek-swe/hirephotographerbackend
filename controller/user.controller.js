@@ -205,14 +205,9 @@ const stripe = require('stripe')('sk_test_51MvGRULyPagBwcPn1TU5Lz4zs5gtiPXOI0mu4
  module.exports.paymentConfirm =async(req,res)=>{
 try {
       const { payment_id } = req.body;
-      
         const { id } = req.body
-       
         // Find the specified photographer by their ID
         const photographer = await Photographer.findById(id);
-        
-         
-
         // if (!photographer) {
         //   return res.status(404).json({ message: 'Photographer not found' });
         // }
@@ -235,6 +230,12 @@ try {
        await statusPhotographerService(req.body.id,{activeStatus:'false'})
         
         await  Payment.create({email:result?.email,payId:payment_id,firstName:result?.firstName})
+        
+      await Photographer.findOneAndUpdate(
+          { _id: id},
+          { $inc: { hireCount: 1 } },
+          { new: true }
+        );
         res.status(201).json({
           message: 'You successfully subscribed',
           data: {
